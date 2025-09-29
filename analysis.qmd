@@ -1,0 +1,26 @@
+---
+title: "SMC and Annealed SMC on Breast Cancer"
+author: "Ravleen Bajaj"
+format: html
+jupyter: julia-1.10
+---
+
+# Load Data
+
+```{julia}
+using RDatasets, DataFrames
+
+# Breast Cancer dataset
+data = dataset("mlbench", "BreastCancer")
+first(data, 5)
+
+include("smc.jl")
+include("dataset.jl")
+
+# Example: Run annealed SMC function
+results = run_annealed_smc(data)
+results
+
+using Plots
+plot(results[:trace])
+```
