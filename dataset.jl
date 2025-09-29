@@ -2,8 +2,8 @@
 using CSV, DataFrames, HTTP
 
 function load_breast_cancer()
-    url = "https://raw.githubusercontent.com/plotly/datasets/master/breast-cancer-wisconsin.csv"
-    df = CSV.read(HTTP.get(url).body, DataFrame)
+    #url = "https://raw.githubusercontent.com/plotly/datasets/master/breast-cancer-wisconsin.csv"
+    df = CSV.read("wdbc_data.csv", DataFrame)
 
     # Clean dataset: drop ID, convert target to 0/1
     select!(df, Not(:Id))
