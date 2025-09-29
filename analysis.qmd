@@ -2,7 +2,7 @@
 title: "SMC and Annealed SMC on Breast Cancer"
 author: "Ravleen Bajaj"
 format: html
-jupyter: julia-1.10
+jupyter: julia-1.11
 ---
 
 # Load Data
