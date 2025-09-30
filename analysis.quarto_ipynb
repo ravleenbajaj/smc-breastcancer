@@ -6,7 +6,7 @@
       "source": [
         "---\n",
         "title: \"Annealed SMC for Breast Cancer Classification\"\n",
-        "author: \"Your Name\"\n",
+        "author: \"Ravleen Bajaj\"\n",
         "format:\n",
         "  html:\n",
         "    code-fold: false\n",
@@ -21,7 +21,7 @@
         "\n",
         "## Setup"
       ],
-      "id": "0bddb0ef"
+      "id": "120732fe"
     },
     {
       "cell_type": "code",
@@ -43,7 +43,7 @@
         "\n",
         "Random.seed!(42)"
       ],
-      "id": "a314d643",
+      "id": "bf8d43ba",
       "execution_count": null,
       "outputs": []
     },
@@ -53,7 +53,7 @@
       "source": [
         "## Load and Explore Data"
       ],
-      "id": "c211b291"
+      "id": "98290b60"
     },
     {
       "cell_type": "code",
@@ -109,7 +109,7 @@
         "\n",
         "We use Sequential Monte Carlo with annealing to sample from the posterior distribution of logistic regression coefficients. The algorithm gradually transitions from the prior (β=0) to the posterior (β=1)."
       ],
-      "id": "3debfc2c"
+      "id": "f605b783"
     },
     {
       "cell_type": "code",
@@ -153,7 +153,7 @@
       "source": [
         "## Annealing Schedule"
       ],
-      "id": "0054d671"
+      "id": "2519c27e"
     },
     {
       "cell_type": "code",
@@ -185,7 +185,7 @@
         "\n",
         "## MCMC Acceptance Rate"
       ],
-      "id": "5427f97b"
+      "id": "738c8d65"
     },
     {
       "cell_type": "code",
@@ -220,7 +220,7 @@
         "\n",
         "### Posterior Mean Estimates"
       ],
-      "id": "9d61982e"
+      "id": "4ccf8ec8"
     },
     {
       "cell_type": "code",
@@ -261,7 +261,7 @@
         "\n",
         "Positive coefficients increase the log-odds of malignancy:"
       ],
-      "id": "5193e906"
+      "id": "e12e930d"
     },
     {
       "cell_type": "code",
@@ -293,7 +293,7 @@
         "\n",
         "### Coefficient Posterior Densities"
       ],
-      "id": "5ae7f38d"
+      "id": "fbaccff8"
     },
     {
       "cell_type": "code",
@@ -353,7 +353,7 @@
       "source": [
         "### Top Features by Effect Size"
       ],
-      "id": "75581051"
+      "id": "95c430fc"
     },
     {
       "cell_type": "code",
@@ -384,7 +384,7 @@
       "source": [
         "## Particle Cloud Visualization"
       ],
-      "id": "c2089f43"
+      "id": "cc51d2be"
     },
     {
       "cell_type": "code",
@@ -400,7 +400,7 @@
         "idx1, idx2 = ranked_idx[1:2]\n",
         "\n",
         "scatter(particles[:, idx1], particles[:, idx2],\n",
-        "        markersize=weights .* length(weights) .* 3,\n",
+        "        markersize=particle_weights .* length(particle_weights) .* 3,\n",
         "        alpha=0.5,\n",
         "        xlabel=feature_names[idx1],\n",
         "        ylabel=feature_names[idx2],\n",
@@ -427,7 +427,7 @@
         "\n",
         "### Effective Sample Size History"
       ],
-      "id": "aa0b13fd"
+      "id": "d640d142"
     },
     {
       "cell_type": "code",
@@ -451,7 +451,7 @@
       "source": [
         "### Particle Weight Distribution"
       ],
-      "id": "7d1618f0"
+      "id": "0cdacb2d"
     },
     {
       "cell_type": "code",
@@ -484,7 +484,7 @@
       "source": [
         "## Predictive Performance"
       ],
-      "id": "665584a7"
+      "id": "a95f06a4"
     },
     {
       "cell_type": "code",
@@ -555,7 +555,7 @@
         "- **Feature selection**: Use posterior distributions to identify sparse models\n",
         "- **Sensitivity analysis**: Test robustness to prior specifications"
       ],
-      "id": "b3cb8ea3"
+      "id": "ece5ff52"
     }
   ],
   "metadata": {
