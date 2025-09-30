@@ -1,72 +1,58 @@
-using CSV, DataFrames, HTTP
+using CSV, DataFrames, HTTP, Statistics
 
 function load_breast_cancer()
     url = "https://raw.githubusercontent.com/selva86/datasets/master/BreastCancer.csv"
-    localfile = "wdbc_data.csv"
     
-    # Download if file doesn't exist
-    if !isfile(localfile)
-        println("Downloading dataset to $localfile ...")
-        resp = HTTP.get(url)
-        open(localfile, "w") do f
-            write(f, String(resp.body))
-        end
-    end
+    println("Downloading dataset from URL...")
     
-    df = CSV.read(localfile, DataFrame)
+    # Always download fresh from URL
+    resp = HTTP.get(url)
     
-    println("Original columns: ", names(df))
+    # Read directly from the response
+    df = CSV.read(IOBuffer(resp.body), DataFrame)
+    
+    println("Columns in dataset: ", names(df))
+    println("Dataset shape: $(size(df))")
     println("First few rows:")
     println(first(df, 3))
     
-    # Drop ID column if present (check actual column names)
-    id_columns = [:Id, :SampleCodeNumber, :id, :ID, Symbol("Sample code number")]
-    for col in id_columns
-        if col in names(df)
-            select!(df, Not(col))
-            println("Dropped column: $col")
-            break
+    # Remove ID column
+    select!(df, Not(:Id))
+    
+    # Extract target variable (Class: 0=benign, 1=malignant)
+    y = Vector{Int}(df.Class)
+    
+    # Remove Class from features
+    select!(df, Not(:Class))
+    
+    # Handle missing values (NA in Bare.nuclei column)
+    # Replace missing/NA with column median
+    for col in names(df)
+        col_data = df[!, col]
+        if eltype(col_data) >: Missing || any(ismissing, col_data)
+            # Find median of non-missing values
+            non_missing = skipmissing(col_data)
+            if length(non_missing) > 0
+                median_val = median(collect(non_missing))
+                df[!, col] = coalesce.(col_data, median_val)
+            end
         end
     end
     
-    # Find the class/target column
-    class_columns = [:Class, :class, :diagnosis, :Diagnosis, :target, :Target]
-    class_col = nothing
+    # Convert all features to Float64
+    X = Matrix{Float64}(df)
     
-    for col in class_columns
-        if col in names(df)
-            class_col = col
-            println("Found class column: $col")
-            break
-        end
+    println("\n✓ Dataset loaded successfully from URL!")
+    println("  Number of samples: $(size(X, 1))")
+    println("  Number of features: $(size(X, 2))")
+    println("  Benign (0): $(sum(y .== 0))")
+    println("  Malignant (1): $(sum(y .== 1))")
+    println("\nFeature names:")
+    for (i, name) in enumerate(["Cl.thickness", "Cell.size", "Cell.shape", 
+                                  "Marg.adhesion", "Epith.c.size", "Bare.nuclei",
+                                  "Bl.cromatin", "Normal.nucleoli", "Mitoses"])
+        println("  $i. $name")
     end
-    
-    if isnothing(class_col)
-        error("Could not find class/target column. Available columns: $(names(df))")
-    end
-    
-    # Convert Class → 0/1
-    if eltype(df[!, class_col]) <: Integer
-        # If numeric, assume 2=benign, 4=malignant (common encoding)
-        df[!, :Class] = map(x -> x == 4 ? 1 : 0, df[!, class_col])
-    else
-        # If string, check for malignant/benign
-        df[!, :Class] = map(x -> lowercase(string(x)) == "malignant" ? 1 : 0, df[!, class_col])
-    end
-    
-    # Remove original class column if it's not named :Class
-    if class_col != :Class
-        select!(df, Not(class_col))
-    end
-    
-    # Extract features (all columns except Class)
-    X = Matrix(select(df, Not(:Class)))
-    y = Vector(df.Class)
-    
-    println("\nFinal dataset shape:")
-    println("  Features (X): $(size(X))")
-    println("  Target (y): $(length(y))")
-    println("  Class distribution: Benign=$(sum(y.==0)), Malignant=$(sum(y.==1))")
     
     return X, y
 end
