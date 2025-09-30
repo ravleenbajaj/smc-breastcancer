@@ -3,6 +3,8 @@ module SMC
 
 using Random, StatsBase, Distributions, LinearAlgebra
 
+export annealed_smc
+
 # Prior: standard normal
 function log_prior(beta::Vector)
     return -0.5 * dot(beta, beta)
