@@ -1,6 +1,6 @@
 ---
 title: "Annealed SMC for Breast Cancer Classification"
-author: "Your Name"
+author: "Ravleen Bajaj"
 format:
   html:
     code-fold: false
@@ -274,7 +274,7 @@ end
 idx1, idx2 = ranked_idx[1:2]
 
 scatter(particles[:, idx1], particles[:, idx2],
-        markersize=weights .* length(weights) .* 3,
+        markersize=particle_weights .* length(particle_weights) .* 3,
         alpha=0.5,
         xlabel=feature_names[idx1],
         ylabel=feature_names[idx2],
