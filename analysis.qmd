@@ -79,7 +79,7 @@ We use Sequential Monte Carlo with annealing to sample from the posterior distri
 # SMC hyperparameters
 N_particles = 500
 mcmc_steps = 5
-step_scale = 0.05
+step_scale = 0.2
 ess_threshold = 0.5
 
 println("\nRunning Annealed SMC...")
