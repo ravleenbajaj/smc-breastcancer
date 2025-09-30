@@ -11,10 +11,7 @@ function load_breast_cancer()
     # Read directly from the response
     df = CSV.read(IOBuffer(resp.body), DataFrame)
     
-    println("Columns in dataset: ", names(df))
     println("Dataset shape: $(size(df))")
-    println("First few rows:")
-    println(first(df, 3))
     
     # Remove ID column
     select!(df, Not(:Id))
@@ -25,34 +22,36 @@ function load_breast_cancer()
     # Remove Class from features
     select!(df, Not(:Class))
     
-    # Handle missing values (NA in Bare.nuclei column)
-    # Replace missing/NA with column median
-    for col in names(df)
-        col_data = df[!, col]
-        if eltype(col_data) >: Missing || any(ismissing, col_data)
-            # Find median of non-missing values
-            non_missing = skipmissing(col_data)
-            if length(non_missing) > 0
-                median_val = median(collect(non_missing))
-                df[!, col] = coalesce.(col_data, median_val)
-            end
+    # Handle Bare.nuclei column which has "NA" strings
+    # Convert to numeric, replacing "NA" with missing
+    bare_nuclei = df[!, Symbol("Bare.nuclei")]
+    
+    # Convert strings to numbers, "NA" becomes missing
+    numeric_vals = Vector{Union{Missing, Float64}}(undef, length(bare_nuclei))
+    for i in 1:length(bare_nuclei)
+        val = bare_nuclei[i]
+        if val == "NA" || ismissing(val)
+            numeric_vals[i] = missing
+        else
+            numeric_vals[i] = parse(Float64, String(val))
         end
     end
     
-    # Convert all features to Float64
+    # Calculate median of non-missing values
+    non_missing = skipmissing(numeric_vals)
+    median_val = median(collect(non_missing))
+    
+    # Replace missing with median and convert to Float64
+    df[!, Symbol("Bare.nuclei")] = [ismissing(x) ? median_val : Float64(x) for x in numeric_vals]
+    
+    # Now all columns should be numeric - convert to Float64 matrix
     X = Matrix{Float64}(df)
     
-    println("\n✓ Dataset loaded successfully from URL!")
-    println("  Number of samples: $(size(X, 1))")
-    println("  Number of features: $(size(X, 2))")
+    println("\n✓ Dataset loaded successfully!")
+    println("  Samples: $(size(X, 1))")
+    println("  Features: $(size(X, 2))")
     println("  Benign (0): $(sum(y .== 0))")
     println("  Malignant (1): $(sum(y .== 1))")
-    println("\nFeature names:")
-    for (i, name) in enumerate(["Cl.thickness", "Cell.size", "Cell.shape", 
-                                  "Marg.adhesion", "Epith.c.size", "Bare.nuclei",
-                                  "Bl.cromatin", "Normal.nucleoli", "Mitoses"])
-        println("  $i. $name")
-    end
     
     return X, y
 end
