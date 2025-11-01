@@ -106,12 +106,13 @@ println("  Final β: $(betas[end])")
 println("  Mean acceptance rate: $(round(mean(acc_hist), digits=3))")
 ```
 
-## Annealing Schedule
+
 
 ```{julia}
 #| label: plot-annealing
 #| fig-cap: "Annealing schedule showing the progression of temperature parameter β from 0 (prior) to 1 (posterior)"
 
+#=
 plot(1:length(betas), betas,
      xlabel="Iteration",
      ylabel="β (Temperature)",
@@ -122,6 +123,7 @@ plot(1:length(betas), betas,
      markersize=3,
      grid=true)
 hline!([0.0, 1.0], linestyle=:dash, color=:gray, alpha=0.5)
+=#
 ```
 
 The annealing schedule adaptively chooses temperature increments to maintain effective sample size (ESS) above the threshold.
@@ -131,7 +133,7 @@ The annealing schedule adaptively chooses temperature increments to maintain eff
 ```{julia}
 #| label: plot-acceptance
 #| fig-cap: "Metropolis-Hastings acceptance rates throughout the annealing process"
-
+#=
 plot(1:length(acc_hist), acc_hist,
      xlabel="Iteration",
      ylabel="Acceptance Rate",
@@ -143,6 +145,7 @@ plot(1:length(acc_hist), acc_hist,
      ylim=(0, 1))
 hline!([0.234], linestyle=:dash, color=:red, 
        label="Optimal (0.234)", alpha=0.5)
+=#
 ```
 
 Acceptance rates around 0.2-0.4 indicate good mixing in the MCMC moves.
@@ -384,7 +387,6 @@ This analysis demonstrated Bayesian logistic regression using Annealed Sequentia
 
 ## Next Steps
 
-- **Cross-validation**: Implement k-fold CV to assess out-of-sample performance
 - **Model comparison**: Compare with simpler models using marginal likelihood
 - **Feature selection**: Use posterior distributions to identify sparse models
 - **Sensitivity analysis**: Test robustness to prior specifications
