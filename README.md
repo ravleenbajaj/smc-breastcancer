@@ -4,15 +4,11 @@ A Julia implementation of Annealed Sequential Monte Carlo (SMC) for Bayesian inf
 
 ## Overview
 
-This project demonstrates how to use Sequential Monte Carlo with annealing to sample from posterior distributions of logistic regression coefficients. The algorithm gradually transitions from the prior distribution (β=0) to the posterior distribution (β=1), making it particularly effective for complex, multimodal posteriors.
-
-## Features
+This project is a simple example that demonstrates how to use Sequential Monte Carlo with annealing to sample from posterior distributions of logistic regression coefficients. The algorithm gradually transitions from the prior distribution (β=0) to the posterior distribution (β=1), making it particularly effective for complex, multimodal posteriors.
 
 - **Annealed SMC Implementation**: Adaptive temperature scheduling to maintain effective sample size
 - **Bayesian Logistic Regression**: Full posterior inference for classification problems
 - **Feature Analysis**: Identification of statistically significant predictors with credible intervals
-- **Visualization Suite**: Posterior distributions, annealing schedules, and joint posterior plots
-- **Medical Application**: Classification of breast cancer tumors (malignant vs benign)
 - **Model Diagnostics**: Acceptance rates, effective sample size tracking, and weight distributions
 
 ## Dataset
@@ -79,7 +75,7 @@ particles, particle_weights, betas, acc_hist = SMC.annealed_smc(
 )
 ```
 
-## Key Results
+## Results
 
 ### Model Performance
 - **Accuracy**: 86.55%
@@ -97,7 +93,7 @@ Features with 95% credible intervals excluding zero:
 4. **Bland Chromatin** (β = -0.522 ± 0.089) - Decreases malignancy risk
 5. **Clump Thickness** (β = -0.340 ± 0.060) - Decreases malignancy risk
 
-### Algorithm Performance
+### Performance
 - **Total annealing steps**: 8,504
 - **Mean acceptance rate**: 0.323
 - **Computation time**: ~10 minutes (606 seconds)
@@ -123,18 +119,10 @@ where:
 
 The temperature schedule is adaptively chosen to maintain effective sample size above the threshold, triggering resampling when particle degeneracy occurs.
 
-## Visualization
-
-The analysis generates several diagnostic plots:
-
-- Annealing Schedule: Shows the progression from prior (β=0) to posterior (β=1)
-- Acceptance Rates: MCMC acceptance rates throughout the annealing process
-- Posterior Distributions: Density plots for each coefficient with credible intervals
-- Joint Posteriors: Scatter plots showing correlations between top features
-- Weight Distributions: Final particle weight distribution and ESS diagnostics
 
 ## Future Goals
 
+- **Interaction plots**
 - **Parallel tempering** for improved mixing.
 - **Sensitivity analysis** to test robustness to different prior specifications
 - **Cross-validation** to implement k-fold CV for out-of-sample evaluation
