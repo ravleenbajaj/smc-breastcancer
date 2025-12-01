@@ -135,11 +135,12 @@ The analysis generates several diagnostic plots:
 
 ## Future Goals
 
-- Parallel tempering for improved mixing.
-- **Cross-validation**: Implement k-fold CV for out-of-sample evaluation
-- **Model comparison**: Compare with simpler models using marginal likelihood
-- **Feature selection**: Identify sparse models using posterior distributions
-- **Sensitivity analysis**: Test robustness to different prior specifications
+- **Parallel tempering** for improved mixing.
+- **Sensitivity analysis** to test robustness to different prior specifications
+- **Cross-validation** to implement k-fold CV for out-of-sample evaluation
+- **Model comparison**, i.e., compare with simpler models using marginal likelihood
+- **Feature selection**, i.e., identify sparse models using posterior distributions
+
 
 
 ## References
