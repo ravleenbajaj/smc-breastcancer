@@ -122,10 +122,8 @@ The temperature schedule is adaptively chosen to maintain effective sample size 
 
 ## Future Goals
 
-- **Interaction plots**
+- **Interaction plots** for selection probabilities.
 - **Parallel tempering** for improved mixing.
-- **Sensitivity analysis** to test robustness to different prior specifications
-- **Cross-validation** to implement k-fold CV for out-of-sample evaluation
 - **Model comparison**, i.e., compare with simpler models using marginal likelihood
 - **Feature selection**, i.e., identify sparse models using posterior distributions
 
